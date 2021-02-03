@@ -1,0 +1,5 @@
+package simpledi
+
+object envProd {
+
+}

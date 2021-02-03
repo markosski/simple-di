@@ -1,22 +1,17 @@
 package simpledi
 
 import simpledi.domain._
+import simpledi.domain.api._
 
-object Hello extends App {
-  val env = EnvDev.env
+object SimpleApp extends App {
+  import envDev.env
 
   val result = for {
-    _        <- env.userRepo.saveUser(User(None, "Baz", EmailAddr("baz.com")))
-    _        <- env.userRepo.saveUser(User(None, "Qux", EmailAddr("qux.com")))
-    allUsers <- env.userRepo.getAllUsers(10)
-    _        <- Right(env.logging.info(s"Found users: ${allUsers.size}"))
-    message  = EmailMessage("Covid 19", "Please, put your mask on!")
-    sentResult <- (allUsers.map { user =>
-        env.emailSender.send(user.email, message)
-      }).partition(_.isLeft) match {
-        case (Nil, xs) => Right(xs.map(_.right.get))
-        case (err, xs) => Left(Error(err.map(_.left.get.msg).mkString("; ")))
-      }
+    _        <- UserApi.saveUser(User(None, "Baz", EmailAddr("baz.com")))
+    _        <- UserApi.saveUser(User(None, "Qux", EmailAddr("qux@mymail.com")))
+    allUsers <- UserApi.getUserBatch()
+    message  = EmailMessage("Covid 19", "Please put your mask on!")
+    sentResult <- EmailApi.sendMessageToUsers(allUsers, message)
   } yield sentResult
 
   result match {

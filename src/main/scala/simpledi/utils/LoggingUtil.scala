@@ -4,6 +4,7 @@ trait LoggingUtilEnv {
     val logging: LoggingUtil
 }
 
+// Capabilities needed to perform logging
 trait LoggingUtil {
     def debug(msg: String): Unit
     def info(msg: String): Unit
@@ -11,6 +12,7 @@ trait LoggingUtil {
     def error(msg: String): Unit
 }
 
+// Concrete implementation of LoggingUtil
 class LoggingUtilConsole extends LoggingUtil {
     def debug(msg: String) = println(s"DEBUG: $msg")
     def info(msg: String) = println(s"INFO: $msg")

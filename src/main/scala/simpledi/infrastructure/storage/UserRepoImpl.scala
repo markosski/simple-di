@@ -5,21 +5,24 @@ import simpledi.domain._
 import simpledi.utils._
 import simpledi._
 
-class UserRepoInMemory[E <: RandomUtilEnv with AppConfigEnv with LoggingUtilEnv](var data: List[User])(val env: E) extends UserRepo {
+// Concrete implementation of UserRepo
+class UserRepoInMemory[E <: RandomUtilEnv with LoggingUtilEnv](var data: List[User])(val env: E) extends UserRepo {
     def getUser(userId: String): Result[Option[User]] = {
-        env.logging.info("Getting user by ID")
+        env.logging.info("Getting user from DB")
         val result = data.filter(x => x.id.fold(false)(id => id == userId))
             .headOption
         Right(result)
     }
-    def saveUser(user: User): Result[Unit] = {
+
+    def saveUser(user: User): Result[User] = {
         val newUser = user.copy(id = Some(env.random.getUUID))
-        env.logging.info(s"Saving new user record: ${newUser}")
+        env.logging.info(s"Saving to DB new user record: ${newUser}")
         data = data :+ newUser
-        Right(())
+        Right(newUser)
     }
+
     def getAllUsers(limit: Int): Result[List[User]] = {
-        env.logging.info("Getting all users")
-        Right(data)
+        env.logging.info("Getting users from DB")
+        Right(data.take(limit))
     }
 }
