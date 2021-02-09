@@ -8,6 +8,9 @@ ThisBuild / organizationName := "simple-di"
 lazy val root = (project in file("."))
   .settings(
     name := "simple-di",
+    libraryDependencies ++= Seq(
+      Dependencies.scalaTest,
+    ),
     scalacOptions ++= Seq(
       "-deprecation"
     )
