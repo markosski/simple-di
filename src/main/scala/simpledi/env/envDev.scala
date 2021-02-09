@@ -17,7 +17,7 @@ object envDev {
         User(Some("2"), "Bar", EmailAddr("bar@mymail.com"))
         )
 
-    implicit val env = new AppConfigEnv with RandomUtilEnv with UserRepoEnv with LoggingUtilEnv with EmailSenderEnv {
+    val env = new AppConfigEnv with RandomUtilEnv with UserRepoEnv with LoggingUtilEnv with EmailSenderEnv {
         val random = randomDev
         val config = configDev
         val logging = loggingDev
@@ -29,7 +29,7 @@ object envDev {
             }
         )
 
-        val emailSender = new EmailSenderImpl()(
+        val emailSender = new EmailSenderNoOp()(
             new LoggingUtilEnv with AppConfigEnv {
                 val logging = loggingDev
                 val config = configDev

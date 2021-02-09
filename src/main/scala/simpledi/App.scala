@@ -4,7 +4,7 @@ import simpledi.domain._
 import simpledi.domain.api._
 
 object SimpleApp extends App {
-  import envDev.env
+  implicit val env = envDev.env
 
   val result = for {
     _        <- UserApi.saveUser(User(None, "Baz", EmailAddr("baz.com")))

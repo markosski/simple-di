@@ -6,7 +6,7 @@ import simpledi.utils._
 import simpledi._
 
 // Concrete implementation of EmailSender
-class EmailSenderImpl[E <: LoggingUtilEnv with AppConfigEnv]()(env: E) extends EmailSender {
+class EmailSenderNoOp()(env: LoggingUtilEnv with AppConfigEnv) extends EmailSender {
     def send(email: EmailAddr, message: EmailMessage): Result[EmailAddr] = {
         if (!email.email.contains("@")) {
             env.logging.info(s"DID NOT send email to $email")

@@ -6,7 +6,7 @@ import simpledi.utils._
 import simpledi._
 
 // Concrete implementation of UserRepo
-class UserRepoInMemory[E <: RandomUtilEnv with LoggingUtilEnv](var data: List[User])(val env: E) extends UserRepo {
+class UserRepoInMemory(var data: List[User])(val env: RandomUtilEnv with LoggingUtilEnv) extends UserRepo {
     def getUser(userId: String): Result[Option[User]] = {
         env.logging.info("Getting user from DB")
         val result = data.filter(x => x.id.fold(false)(id => id == userId))
